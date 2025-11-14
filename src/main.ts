@@ -10,7 +10,9 @@ async function bootstrap() {
   const config = app.get(ConfigService);
   
   const prisma = app.get(PrismaService);
-  await prisma.enableShutdownHooks(app);
+  process.on('beforeExit', async () => {
+    await app.close();
+  });
 
   app.useGlobalFilters(
     new HttpExceptionFilter(),
@@ -19,5 +21,4 @@ async function bootstrap() {
 
   await app.listen(config.get<number>('PORT') ?? 3000);
 }
-
 bootstrap().catch(console.error);
