@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common';
+import { Body, Controller, Delete, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AreaService } from './area.service';
 import { NetworkArea } from './dto/network-area.dto';
 
@@ -7,12 +7,12 @@ export class AreaController {
   constructor(private readonly areaService: AreaService) {}
 
   @Post('synchronize')
-  async upsertAreas(@Body() changes: NetworkArea[]): Promise<boolean> {
-    return this.areaService.upsertAreas(changes);
+  async upsertAreas(@Body() changes: NetworkArea[]): Promise<void> {
+    await this.areaService.upsertAreas(changes);
   }
 
   @Delete('synchronize')
-  async deleteAreasByIds(@Body() changes: string[]): Promise<boolean> {
-    return this.areaService.deleteAreasByIds(changes);
+  async deleteAreasByIds(@Body() changes: string[]): Promise<void> {
+    await this.areaService.deleteAreasByIds(changes);
   }
 }

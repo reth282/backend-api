@@ -1,26 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
 import { NetworkArea } from './dto/network-area.dto';
+import { PrismaService } from '../../prisma/prisma.service';
+
+type UpsertResult = { id: string, name: string };
 
 @Injectable()
 export class AreaService {
-  private prisma = new PrismaClient();
+  constructor(private prisma: PrismaService) {}
 
-  async upsertAreas(changes: NetworkArea[]): Promise<boolean> {
-    for (const change of changes) {
-      await this.prisma.area.upsert({
+  async upsertAreas(changes: NetworkArea[]): Promise<void> {
+    const upsertOperations = changes.map(change =>
+      this.prisma.area.upsert({
         where: { id: change.id },
         update: { name: change.name },
         create: { id: change.id, name: change.name },
-      });
-    }
-    return true;
+      }),
+    );
+    await this.prisma.$transaction<Promise<UpsertResult>[]>(upsertOperations as any); 
   }
 
-  async deleteAreasByIds(changes: string[]): Promise<boolean> {
-    await this.prisma.area.deleteMany({
-      where: { id: { in: changes } },
+  async deleteAreasByIds(ids: string[]): Promise<number> {
+    const { count } = await this.prisma.area.deleteMany({
+      where: { id: { in: ids } },
     });
-    return true;
+    return count;
   }
 }
