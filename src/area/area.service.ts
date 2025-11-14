@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { NetworkAreaDto } from './dto/network-area.dto';
+import { NetworkArea } from './dto/network-area.dto';
 
 @Injectable()
 export class AreaService {
   private prisma = new PrismaClient();
 
-  async pushAreaChanges(changes: NetworkAreaDto[]): Promise<boolean> {
+  async upsertAreas(changes: NetworkArea[]): Promise<boolean> {
     for (const change of changes) {
       await this.prisma.area.upsert({
         where: { id: change.id },
@@ -17,7 +17,7 @@ export class AreaService {
     return true;
   }
 
-  async deleteAreaChanges(changes: string[]): Promise<boolean> {
+  async deleteAreasByIds(changes: string[]): Promise<boolean> {
     await this.prisma.area.deleteMany({
       where: { id: { in: changes } },
     });

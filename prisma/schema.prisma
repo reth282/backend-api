@@ -8,7 +8,8 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Area {
+model AreaEntity {
   id   String @id
   name String
+	@@map("Area")
 }

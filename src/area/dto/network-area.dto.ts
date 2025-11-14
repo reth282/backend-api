@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty } from 'class-validator';
 
-export class NetworkAreaDto {
+export class NetworkArea {
   @IsString()
   @IsNotEmpty()
   id: string;

@@ -4,7 +4,7 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 import { AreaService } from './../src/area/area.service';
-import { NetworkAreaDto } from './../src/area/dto/network-area.dto';
+import { NetworkArea } from './../src/area/dto/network-area.dto';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
@@ -38,7 +38,7 @@ describe('AreaService (e2e)', () => {
   });
 
   it('should create and retrieve areas', async () => {
-    const area: NetworkAreaDto = { id: '1', name: 'Test Area' };
+    const area: NetworkArea = { id: '1', name: 'Test Area' };
     await areaService.pushAreaChanges([area]);
 
     const areas = await areaService.pushAreaChanges([area]);
