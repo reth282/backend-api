@@ -7,15 +7,17 @@ import { PrismaService } from '../prisma/prisma.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const prismaService = app.get(PrismaService);
-  await prismaService.enableShutdownHooks(app);
-
-  app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalFilters(new PrismaExceptionFilter());
-
-  const configService = app.get(ConfigService);
-  const port = configService.get<number>('PORT') ?? 3000;
+  const config = app.get(ConfigService);
   
-  await app.listen(port);
+  const prisma = app.get(PrismaService);
+  await prisma.enableShutdownHooks(app);
+
+  app.useGlobalFilters(
+    new HttpExceptionFilter(),
+    new PrismaExceptionFilter()
+  );
+
+  await app.listen(config.get<number>('PORT') ?? 3000);
 }
-bootstrap();
+
+bootstrap().catch(console.error);

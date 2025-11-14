@@ -7,7 +7,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // Hace que el ConfigService esté disponible globalmente
+      isGlobal: true,
     }),
     AreaModule,
     PrismaModule
