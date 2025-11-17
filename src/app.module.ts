@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AreaModule } from './area/area.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { PrismaModule } from '../prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -10,7 +11,8 @@ import { PrismaModule } from '../prisma/prisma.module';
       isGlobal: true,
     }),
     AreaModule,
-    PrismaModule
+    PrismaModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
