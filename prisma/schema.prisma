@@ -9,6 +9,10 @@ datasource db {
 }
 
 model Area {
-  id   String @id
-  name String
+  id     String @id
+  name   String
+  userId String
+
+  @@index([userId])
+  @@unique([userId, id])
 }

@@ -6,21 +6,21 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class AreaService {
   constructor(private prisma: PrismaService) {}
 
-  async upsertAreas(changes: NetworkArea[]): Promise<void> {
+  async upsertAreas(changes: NetworkArea[], userId: string): Promise<void> {
     await this.prisma.$transaction(
       changes.map(({ id, name }) =>
         this.prisma.area.upsert({
-          where: { id },
+          where: { userId_id: { userId, id } },
           update: { name },
-          create: { id, name },
+          create: { id, name, userId },
         })
       )
     );
   }
 
-  async deleteAreasByIds(ids: string[]): Promise<void> {
+  async deleteAreasByIds(ids: string[], userId: string): Promise<void> {
     await this.prisma.area.deleteMany({
-      where: { id: { in: ids } },
+      where: { id: { in: ids }, userId },
     });
   }
 }
